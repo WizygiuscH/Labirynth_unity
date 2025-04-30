@@ -1,12 +1,11 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] float mouseSens = 100f;
-    Transform playerBody;
-    float xRotation;
-  
+    [SerializeField] float mouseSensivity = 100f; //czu³oœæ myszy
+    Transform playerBody; //referencja do naszego gracza, obrót kamery bêdzie obraca³ naszym graczem
+    float xRotation = 0; // obrót wzglêdem osi x kamery
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -18,14 +17,13 @@ public class CameraController : MonoBehaviour
         CameraRotation();
     }
 
-
     void CameraRotation()
     {
-        float mouseX = Input.GetAxis("MouseX") * mouseSens * Time.deltaTime;
-        float mouseY = Input.GetAxis("MouseY") * mouseSens * Time.deltaTime;
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensivity * Time.deltaTime;
 
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -85f, 80f);
+        xRotation -= mouseY; //xRotation = xRotation - mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 80f);
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 

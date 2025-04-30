@@ -2,18 +2,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    float speed = 12f;
-    Vector3 velocity;
-    CharacterController characterController;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] float speed = 12f; // szybkoœæ naszej postaci
+    Vector3 velocity; // pos³u¿y do wyliczenia prêdkoœci w dó³
+    CharacterController characterController; //komponent character Controller
     void Start()
     {
         characterController = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         PlayerMove();
