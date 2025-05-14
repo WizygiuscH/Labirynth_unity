@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -7,7 +8,12 @@ public class GameManager : MonoBehaviour
     bool gamePaused = false;
     bool endGame = false;
     bool win = false;
-    
+
+    public int points = 0;
+
+    public int redKey = 0;
+    public int greenKey = 0;
+    public int goldKey = 0;
 
     [SerializeField] int timeToEnd;
     void Start()
@@ -26,42 +32,75 @@ public class GameManager : MonoBehaviour
        
     }
 
-    void Stopper()
+    public void AddPoints(int point)
     {
-        timeToEnd--;
-        Debug.Log("TIME: " + timeToEnd + " sec");
+        points += point;
+    }
 
-        if(timeToEnd <= 0 )
+    public void AddTime(int time)
+    {
+        timeToEnd += time;
+    }
+
+    public void FreezeTime(int freeze)
+    {
+        CancelInvoke("Stopper");
+        InvokeRepeating("Stopper", freeze, 1);
+    }
+
+    public void AddKey(KeyColor color)
+    {
+        if (color == KeyColor.Green)
         {
-            timeToEnd = 0;
-            endGame = true;
+            greenKey++;
         }
-        if(endGame)
+        else if (color == KeyColor.Gold)
         {
-            EndGame();
+            goldKey++;
+        }
+        else if (color == KeyColor.Red)
+        {
+            redKey++;
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        PauseCheck();
-    }
-
-    void PauseCheck()
-    {
-        if (Input.GetKeyUp(KeyCode.P))
+        void Stopper()
         {
-            if(gamePaused)
+            timeToEnd--;
+            Debug.Log("TIME: " + timeToEnd + " sec");
+
+            if (timeToEnd <= 0)
             {
-                ResumeGame();
+                timeToEnd = 0;
+                endGame = true;
             }
-            else
+            if (endGame)
             {
-                PauseGame();
+                EndGame();
             }
         }
-    }
+
+        // Update is called once per frame
+        void Update()
+        {
+            PauseCheck();
+        }
+
+        void PauseCheck()
+        {
+            if (Input.GetKeyUp(KeyCode.P))
+            {
+                if (gamePaused)
+                {
+                    ResumeGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
+            }
+        }
+    
 
     public void PauseGame()
     {
@@ -87,6 +126,18 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("You lost");
+        }
+    }
+
+
+
+    void PickUpCheck()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Debug.Log("Actual Time: " + timeToEnd);
+            Debug.Log("Key red: " + redKey + " green: " + greenKey + " gold: " + goldKey);
+            Debug.Log("Points: " + points);
         }
     }
 }
